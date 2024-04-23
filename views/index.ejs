@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles/styles.css">
+    <title>ToDo App</title>
+</head>
+<body>
+    <div id="full-page">
+        <div id="gradient" class="top-side">
+            <div>
+                <h1>My Tasks</h1>
+                <form action="/submit" method="POST" class="d-flex flex-row input-form">
+                    <input type="submit" class="add-button add-icon" value="">
+                    <input type="text" id="task-input" name="task-input" placeholder="Add a new task here..." required>
+                    <input type="submit" class="add-button" value="Add">
+                </form>
+            </div>
+        </div>
+        <div class="bottom-side">
+            <div class="task-container">
+                <ul id="task-list">
+                    <% if (taskList.length > 0) { %>
+                        <% taskList.forEach(function(task) { %>
+                            <form class="task-form d-flex flex-row">
+                                <li><%= task %></li>
+                                <button class="done-button" type="button"><img src="./images/check-circle.svg" alt="checkbox-icon"></button>
+                                <button class="delete-button" type="button"><img src="./images/trash.svg" alt="trash-icon"></button>
+                            </form>
+                        <% }); %>
+                    <% } else { %>
+                        <h3>Add your first task</h3>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </div>   
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="./index.js" charset="UTF-8"></script>
+<script>
+// Animation of button press.
+function buttonAnimation($currentButton) {
+    $currentButton.addClass("pressed");
+
+    setTimeout(function() {
+        $currentButton.removeClass("pressed");
+    }, 130);
+}
+</script>
+<script>
+// Animation of the text in the task window by tapping or clicking on it.
+$("li").on("click", function() {
+    $(this).toggleClass("task-done");
+    var opacity = $(this).hasClass("task-done") ? 0.5 : 1;
+    $(this).animate({ opacity: opacity });
+});
+</script>
+<script>
+    // Animation of the text in the task window by tapping or clicking on done button.
+$(".done-button").on("click", function() {
+    $(this).prev("li").toggleClass("task-done");
+    var opacity = $(this).prev("li").hasClass("task-done") ? 0.5 : 1;
+    $(this).prev("li").animate({ opacity: opacity });
+    buttonAnimation($(this).find("img"));
+});
+</script>
+<script>
+// Delete the entire row of the task.
+$(".delete-button").on("click", function() {
+    var deleteForm = $(this);
+    buttonAnimation($(this).find("img"));
+
+    setTimeout(function() {
+        deleteForm.closest(".task-form").remove();
+    }, 130);
+});
+</script>
+</body>
+</html>
